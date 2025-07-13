@@ -1,0 +1,6 @@
+resources:
+  - ../../../analytics-service
+
+images:
+  - name: docker.io/shananjana/analytics-service
+    newTag: latest
