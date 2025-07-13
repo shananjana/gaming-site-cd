@@ -3,4 +3,4 @@ resources:
 
 images:
   - name: docker.io/shananjana/order-service
-    newTag: b542248
+    newTag: 3ca4cf1
