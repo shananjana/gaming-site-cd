@@ -3,4 +3,4 @@ resources:
 
 images:
   - name: docker.io/shananjana/game-service
-    newTag: 46ab30d
+    newTag: b542248
