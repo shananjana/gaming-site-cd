@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lugx-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lugx-frontend
+  template:
+    metadata:
+      labels:
+        app: lugx-frontend
+    spec:
+      containers:
+      - name: lugx-frontend
+        image: docker.io/shananjana/frontend:latest
+        imagePullPolicy: Never 
+        ports:
+        - containerPort: 80
+        env:
+        - name: ANALYTICS_API_URL
+          value: "http://analytics-service:8080"

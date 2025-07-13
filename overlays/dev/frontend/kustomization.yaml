@@ -1,0 +1,6 @@
+resources:
+  - ../../../frontend
+
+images:
+  - name: docker.io/shananjana/frontend
+    newTag: latest

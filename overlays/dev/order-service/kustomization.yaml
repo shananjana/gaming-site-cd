@@ -1,0 +1,6 @@
+resources:
+  - ../../../order-service
+
+images:
+  - name: docker.io/shananjana/order-service
+    newTag: latest

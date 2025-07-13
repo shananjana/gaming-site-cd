@@ -1,0 +1,33 @@
+name: Deploy Order Service
+
+on:
+  push:
+    paths:
+      - 'overlays/dev/order-service/kustomization.yaml'
+      - 'order-service/**'
+      - '.github/workflows/deploy-order-service.yml'
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout CD repo
+      uses: actions/checkout@v4
+
+    - name: Install Kustomize
+      run: |
+        curl -s https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh | bash
+        sudo mv kustomize /usr/local/bin/
+
+    # - name: Set up Kubeconfig
+    #   run: echo "${{ secrets.KUBECONFIG_DATA }}" > kubeconfig.yaml
+
+    - name: Build manifest with Kustomize
+      run: kustomize build overlays/dev/order-service > deploy.yaml
+
+    - name: Deploy to Kubernetes
+      run: |
+        cat deploy.yaml

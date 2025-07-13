@@ -1,0 +1,6 @@
+resources:
+  - ../../../game-service
+
+images:
+  - name: docker.io/shananjana/game-service
+    newTag: latest
