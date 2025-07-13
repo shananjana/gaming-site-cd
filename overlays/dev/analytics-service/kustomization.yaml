@@ -3,4 +3,4 @@ resources:
 
 images:
   - name: docker.io/shananjana/analytics-service
-    newTag: latest
+    newTag: e452ef5
