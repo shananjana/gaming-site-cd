@@ -1,0 +1,6 @@
+resources:
+  - ../../../analytics-dashboard
+
+images:
+  - name: docker.io/shananjana/analytics-dashboard
+    newTag: latest
