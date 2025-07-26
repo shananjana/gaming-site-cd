@@ -38,6 +38,14 @@ spec:
             name: order-service
             port:
               number: 6000
+      
+      - path: /lugx-game/analytics
+        pathType: Prefix
+        backend:
+          service:
+            name: analytics-dashboard
+            port:
+              number: 8081
 
       - path: /
         pathType: Prefix
