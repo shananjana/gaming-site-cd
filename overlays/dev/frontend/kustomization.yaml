@@ -3,4 +3,4 @@ resources:
 
 images:
   - name: docker.io/shananjana/frontend
-    newTag: 3ca4cf1
+    newTag: 8b902c6
