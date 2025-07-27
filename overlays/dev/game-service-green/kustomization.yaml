@@ -1,0 +1,24 @@
+resources:
+  - ../game-service
+
+patches:
+  - target:
+      kind: Deployment
+      name: game-service
+    patch: |-
+      - op: replace
+        path: /metadata/labels/app
+        value: game-service-green
+      - op: replace
+        path: /spec/selector/matchLabels/app
+        value: game-service-green
+      - op: replace
+        path: /spec/template/metadata/labels/app
+        value: game-service-green
+  - target:
+      kind: Service
+      name: game-service
+    patch: |-
+      - op: replace
+        path: /spec/selector/app
+        value: game-service-blue

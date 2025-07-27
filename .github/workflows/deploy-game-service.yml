@@ -28,6 +28,36 @@ jobs:
     - name: Build manifest with Kustomize
       run: kustomize build overlays/dev/game-service > deploy.yaml
 
+    - name: Determine active deployment
+      id: deployment
+      run: |
+        ACTIVE=$(kubectl get svc game-service -o=jsonpath='{.spec.selector.app}')
+        echo "Current live deployment: $ACTIVE"
+        if [[ "$ACTIVE" == "game-service-green" ]]; then
+          echo "deployment=blue" >> $GITHUB_OUTPUT
+        else
+          echo "deployment=green" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Build and deploy inactive deployment
+      run: |
+        DEPLOYMENT=${{ steps.deployment.outputs.deployment }}
+        echo "Deploying to: $DEPLOYMENT"
+        kustomize build overlays/dev/game-service-${DEPLOYMENT} > deploy.yaml
+        # kubectl apply -f deploy.yaml
+    
     - name: Deploy to Kubernetes
       run: |
         cat deploy.yaml
+
+    - name: Wait for rollout
+      run: |
+        DEPLOYMENT=${{ steps.deployment.outputs.deployment }}
+        echo "Waiting for deployment game-service-${DEPLOYMENT} to be ready"
+        # kubectl rollout status deployment game-service-${DEPLOYMENT} --timeout=60s
+
+    - name: Switch Service to new deployment
+      run: |
+        DEPLOYMENT=${{ steps.deployment.outputs.deployment }}
+        kubectl patch svc game-service -p "{\"spec\": {\"selector\": {\"app\": \"game-service-${DEPLOYMENT}\"}}}" --dry-run=client -o yaml > patched-service.yaml
+        cat patched-service.yaml
