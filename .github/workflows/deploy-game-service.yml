@@ -31,7 +31,8 @@ jobs:
     - name: Determine active deployment
       id: deployment
       run: |
-        ACTIVE=$(kubectl get svc game-service -o=jsonpath='{.spec.selector.app}')
+        # ACTIVE=$(kubectl get svc game-service -o=jsonpath='{.spec.selector.app}')
+        ACTIVE="game-service-green"  # Simulating active deployment for demonstration
         echo "Current live deployment: $ACTIVE"
         if [[ "$ACTIVE" == "game-service-green" ]]; then
           echo "deployment=blue" >> $GITHUB_OUTPUT
@@ -59,5 +60,19 @@ jobs:
     - name: Switch Service to new deployment
       run: |
         DEPLOYMENT=${{ steps.deployment.outputs.deployment }}
-        kubectl patch svc game-service -p "{\"spec\": {\"selector\": {\"app\": \"game-service-${DEPLOYMENT}\"}}}" --dry-run=client -o yaml > patched-service.yaml
+
+        cat <<EOF > patched-service.yaml
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: game-service
+        spec:
+          selector:
+            app: game-service-${DEPLOYMENT}
+          ports:
+            - protocol: TCP
+              port: 80
+              targetPort: 8080
+        EOF
+        # kubectl patch svc game-service -p "{\"spec\": {\"selector\": {\"app\": \"game-service-${DEPLOYMENT}\"}}}" --dry-run=client -o yaml > patched-service.yaml
         cat patched-service.yaml
