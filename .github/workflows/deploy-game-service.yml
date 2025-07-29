@@ -61,19 +61,6 @@ jobs:
       run: |
         DEPLOYMENT=${{ steps.deployment.outputs.deployment }}
 
-        cat <<EOF > patched-service.yaml
-        apiVersion: v1
-        kind: Service
-        metadata:
-          name: game-service
-        spec:
-          selector:
-            app: game-service-${DEPLOYMENT}
-          ports:
-            - protocol: TCP
-              port: 80
-              targetPort: 8080
-        EOF
-        # kubectl patch svc game-service -p "{\"spec\": {\"selector\": {\"app\": \"game-service-${DEPLOYMENT}\"}}}" --dry-run=client -o yaml > patched-service.yaml
+        kubectl patch svc game-service -p "{\"spec\": {\"selector\": {\"app\": \"game-service-${DEPLOYMENT}\"}}}" --dry-run=client -o yaml > patched-service.yaml
         cat patched-service.yaml
         kubectl get ns
