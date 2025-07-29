@@ -1,6 +1,12 @@
 #!/bin/bash
 
-BASE_URL="http://localhost:5000/api/games"
+BASE_PATH="$1"
+if [ -z "$BASE_PATH" ]; then
+  echo "Usage: $0 <base_path>"
+  exit 1
+fi
+
+BASE_URL="$BASE_PATH/api/games"
 
 echo "Running integration tests against $BASE_URL"
 

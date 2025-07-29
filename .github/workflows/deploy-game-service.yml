@@ -63,4 +63,21 @@ jobs:
 
         kubectl patch svc game-service -p "{\"spec\": {\"selector\": {\"app\": \"game-service-${DEPLOYMENT}\"}}}" --dry-run=client -o yaml > patched-service.yaml
         cat patched-service.yaml
-        kubectl get ns
+    
+    - name: Run integration tests
+      run: |
+        echo "Starting port-forward for game-service..."
+        kubectl port-forward svc/game-service 5000:5000 &
+        PF_PID=$!
+
+        echo "Waiting for port-forward to initialize..."
+        sleep 10 
+
+        BASE_URL="http://localhost:5000"
+        echo "Running integration tests against $BASE_URL"
+        
+        chmod +x integration-runs/game-service.sh
+        ./integration-runs/game-service.sh "$BASE_URL"
+
+        # Kill background port-forward
+        kill $PF_PID
