@@ -3,4 +3,4 @@ resources:
 
 images:
   - name: docker.io/shananjana/analytics-dashboard
-    newTag: f0c68d8
+    newTag: 05004ca
