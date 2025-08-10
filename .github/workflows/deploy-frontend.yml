@@ -11,8 +11,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
-
+    runs-on: self-hosted
     steps:
     - name: Checkout CD repo
       uses: actions/checkout@v4
@@ -31,3 +30,4 @@ jobs:
     - name: Deploy to Kubernetes
       run: |
         cat deploy.yaml
+        kubectl apply -f deploy.yaml

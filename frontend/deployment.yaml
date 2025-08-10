@@ -17,7 +17,6 @@ spec:
       containers:
       - name: lugx-frontend
         image: docker.io/shananjana/frontend:latest
-        imagePullPolicy: Never 
         ports:
         - containerPort: 80
         env:
